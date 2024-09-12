@@ -1,0 +1,64 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #e0f7fa;
+}
+
+.container {
+    text-align: center;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    color: #00796b;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #00796b;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #004d40;
+}
+
+#progressContainer {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+}
+
+#progressBar {
+    height: 20px;
+    background-color: #004d40;
+    border-radius: 4px;
+    width: 0;
+    transition: width 0.4s ease;
+}
+
+#progressText {
+    display: block;
+    margin-top: 5px;
+    color: #00796b;
+    font-weight: bold;
+}
+
+select {
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+}

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF to TXT and TXT to PDF Converter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>PDF to TXT and TXT to PDF Converter</h1>
+
+        <!-- Dropdown to choose conversion type -->
+        <select id="conversionType">
+            <option value="" disabled selected>Select conversion type</option>
+            <option value="pdfToTxt">Convert PDF to TXT</option>
+            <option value="txtToPdf">Convert TXT to PDF</option>
+        </select>
+
+        <!-- File input -->
+        <input type="file" id="fileInput" />
+        <button id="convertBtn">Convert</button>
+        <div id="progressContainer">
+            <div id="progressBar"></div>
+            <span id="progressText">0%</span>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
