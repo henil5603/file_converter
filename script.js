@@ -1,91 +1,89 @@
-document.getElementById('convertBtn').addEventListener('click', () => {
-    const conversionType = document.getElementById('conversionType').value;
+document.addEventListener('DOMContentLoaded', () => {
     const fileInput = document.getElementById('fileInput');
-    const progressBar = document.getElementById('progressBar');
-    const progressText = document.getElementById('progressText');
+    const editor = document.getElementById('editor');
+    const editBtn = document.getElementById('editBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const conversionTypeSelect = document.getElementById('conversionType');
 
-    if (conversionType === '') {
-        alert('Please select a conversion type.');
-        return;
-    }
+    let fileType;
+    let originalContent = '';
+    let originalFileName = '';
 
-    if (fileInput.files.length === 0) {
-        alert('Please select a file first.');
-        return;
-    }
-
-    if (conversionType === 'pdfToTxt') {
-        convertPdfToTxt(fileInput.files[0], progressBar, progressText);
-    } else if (conversionType === 'txtToPdf') {
-        convertTxtToPdf(fileInput.files[0], progressBar, progressText);
-    }
-});
-
-function convertPdfToTxt(file, progressBar, progressText) {
-    const fileReader = new FileReader();
-
-    fileReader.onloadstart = function() {
-        progressBar.style.width = '0%';
-        progressText.textContent = '0%';
-    };
-
-    fileReader.onprogress = function(event) {
-        if (event.lengthComputable) {
-            const percent = Math.round((event.loaded / event.total) * 100);
-            progressBar.style.width = `${percent}%`;
-            progressText.textContent = `${percent}%`;
+    // Handle file type selection
+    conversionTypeSelect.addEventListener('change', function() {
+        fileType = this.value;
+        editor.value = '';
+        fileInput.value = '';
+        saveBtn.style.display = 'none';
+        editBtn.style.display = 'none'; // Hide edit button initially
+        if (fileType === 'pdfToTxt') {
+            editor.setAttribute('readonly', true); // Make editor read-only for PDF content
+        } else {
+            editor.removeAttribute('readonly'); // Allow editing for TXT
         }
-    };
+    });
 
-    fileReader.onload = function(event) {
-        const typedArray = new Uint8Array(event.target.result);
-        pdfjsLib.getDocument(typedArray).promise.then(pdfDoc => {
-            let txtContent = '';
+    // Handle file input changes (load PDF or TXT)
+    fileInput.addEventListener('change', function() {
+        const file = this.files[0];
+        originalFileName = file.name;
+        const reader = new FileReader();
 
-            const pagesPromises = [];
-            for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
-                pagesPromises.push(pdfDoc.getPage(pageNum).then(page => {
-                    return page.getTextContent().then(textContent => {
-                        const pageText = textContent.items.map(item => item.str).join(' ');
-                        txtContent += pageText + '\n';
-                    });
-                }));
+        reader.onload = async function(e) {
+            if (file.name.endsWith('.pdf')) {
+                fileType = 'pdf'; // Set file type to PDF
+                // Convert PDF to text for editing
+                const pdfBytes = new Uint8Array(e.target.result);
+                const pdf = await pdfjsLib.getDocument({ data: pdfBytes }).promise;
+                let textContent = '';
+
+                for (let i = 0; i < pdf.numPages; i++) {
+                    const page = await pdf.getPage(i + 1);
+                    const text = await page.getTextContent();
+                    textContent += text.items.map(item => item.str).join(' ') + '\n';
+                }
+
+                originalContent = textContent;
+                editor.value = textContent;
+                editor.setAttribute('readonly', true); // PDF is initially read-only
+                saveBtn.style.display = 'inline-block';
+                editBtn.style.display = 'inline-block'; // Show Edit button
+            } else if (file.name.endsWith('.txt')) {
+                fileType = 'txt'; // Set file type to TXT
+                // Load TXT and set to editor
+                originalContent = e.target.result;
+                editor.value = e.target.result;
+                editor.removeAttribute('readonly'); // Allow editing for text files
+                saveBtn.style.display = 'inline-block';
+                editBtn.style.display = 'inline-block'; // Show Edit button
             }
+        };
 
-            Promise.all(pagesPromises).then(() => {
-                const blob = new Blob([txtContent], {type: 'text/plain'});
-                saveAs(blob, 'converted.txt');
-            });
-        });
-    };
-
-    fileReader.readAsArrayBuffer(file);
-}
-
-function convertTxtToPdf(file, progressBar, progressText) {
-    const reader = new FileReader();
-
-    reader.onloadstart = function() {
-        progressBar.style.width = '0%';
-        progressText.textContent = '0%';
-    };
-
-    reader.onprogress = function(event) {
-        if (event.lengthComputable) {
-            const percent = Math.round((event.loaded / event.total) * 100);
-            progressBar.style.width = `${percent}%`;
-            progressText.textContent = `${percent}%`;
+        if (file.name.endsWith('.pdf')) {
+            reader.readAsArrayBuffer(file);
+        } else if (file.name.endsWith('.txt')) {
+            reader.readAsText(file);
         }
-    };
+    });
 
-    reader.onload = function(event) {
-        const text = event.target.result;
-        const { jsPDF } = window.jspdf;
-        const pdf = new jsPDF();
+    // Enable editing when Edit button is clicked
+    editBtn.addEventListener('click', function() {
+        editor.removeAttribute('readonly'); // Enable editing
+        alert('You can now edit the content.');
+    });
 
-        pdf.text(text, 10, 10);
-        pdf.save('converted.pdf');
-    };
-
-    reader.readAsText(file);
-}
+    // Save edited content in the original file format
+    saveBtn.addEventListener('click', async function() {
+        if (fileType === 'txt') {
+            // Save as a TXT file
+            const blob = new Blob([editor.value], { type: 'text/plain;charset=utf-8' });
+            saveAs(blob, originalFileName);
+        } else if (fileType === 'pdf') {
+            // Save as a PDF file
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text(editor.value, 10, 10);
+            doc.save(originalFileName); // Save using the original PDF file name
+        }
+    });
+});
