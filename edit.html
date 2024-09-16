@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF and Text File Editor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MM7LW8BM"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+
+    <header>
+        <h1>File Editor</h1>
+        <nav>
+            <a href="index.html">Home</a> | 
+            <a href="write.html">Write</a> |
+            <a href="convert.html">Convert</a> | 
+            <a href="edit.html">Edit</a> |
+            <a href="about.html">About </a> |
+            <a href="Privacy policy.html">Policy </a> |  
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Edit TXT or PDF File</h2>
+
+        <!-- Dropdown for selecting the file type -->
+        <label for="conversionType">Select File Type:</label>
+        <select id="conversionType">
+            <option value="txtToPdf">TXT File</option>
+            <option value="pdfToTxt">PDF File</option>
+        </select>
+
+        <!-- File input for uploading the file -->
+        <input type="file" id="fileInput" accept=".txt,.pdf">
+
+        <!-- Textarea for displaying and editing the file content -->
+        <textarea id="editor" rows="10" cols="60" placeholder="Content will appear here..."></textarea>
+
+
+        <!-- Progress Bar (hidden by default) -->
+        <div id="progressContainer" style="display:none;">
+            <div id="progressBar"></div>
+            <div id="progressText">0%</div>
+        </div>
+
+        <!-- Buttons for editing and saving the file -->
+        <button id="editBtn" style="display: none;">Edit</button>
+        <button id="saveBtn" style="display: none;">Save</button>
+    </div>
+
+    <!-- Include external libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.7.570/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="script.js"></script>
+    <footer>
+        <p>&copy; 2024 Text to PDF Converter. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
