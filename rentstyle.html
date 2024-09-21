@@ -78,11 +78,12 @@
             background-color: #4cae4c;
         }
 
-        .go-back {
+        .back-button {
             background-color: #d9534f;
+            margin-top: 10px;
         }
 
-        .go-back:hover {
+        .back-button:hover {
             background-color: #c9302c;
         }
     </style>
@@ -94,6 +95,7 @@
         <p>If you have any questions or need assistance, please reach out to us using the form below or via email.</p>
         
         <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required>
             
@@ -102,16 +104,17 @@
             
             <label for="message">Message:</label>
             <textarea id="message" name="message" rows="5" required></textarea>
+            
             <input type="hidden" name="access_key" value="501305b6-7e47-4a18-a148-a1431b964d22">      
             <button type="submit">Submit Form</button>
-            <button type="button" class="go-back" onclick="goBack()">Go Back</button> <!-- Added Go Back button -->
+            <button type="button" class="back-button" onclick="resetPage()">Go Back</button>
+        
         </form>
     </div>
 
     <script>
-        function goBack() {
-            document.getElementById('contactForm').reset(); // Reset the form
-            window.history.back(); // Go back to the previous page
+        function resetPage() {
+            window.location.reload(); // Refreshes the page, resetting the form
         }
     </script>
 </body>
