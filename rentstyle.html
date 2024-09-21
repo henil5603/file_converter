@@ -77,6 +77,15 @@
         button:hover {
             background-color: #4cae4c;
         }
+
+        .back-button {
+            background-color: #d9534f;
+            margin-top: 10px;
+        }
+
+        .back-button:hover {
+            background-color: #c9302c;
+        }
     </style>
 </head>
 <body>
@@ -85,7 +94,7 @@
         <h2>Contact Us</h2>
         <p>If you have any questions or need assistance, please reach out to us using the form below or via email.</p>
         
-        <form action="https://api.web3forms.com/submit" method="POST">
+        <form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
 
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required>
@@ -95,10 +104,19 @@
             
             <label for="message">Message:</label>
             <textarea id="message" name="message" rows="5" required></textarea>
+            
             <input type="hidden" name="access_key" value="501305b6-7e47-4a18-a148-a1431b964d22">      
             <button type="submit">Submit Form</button>
+            <button type="button" class="back-button" onclick="goBack()">Go Back</button>
         
         </form>
     </div>
+
+    <script>
+        function goBack() {
+            document.getElementById("contactForm").reset(); // Reset form fields
+            window.history.back(); // Navigate back to the previous page
+        }
+    </script>
 </body>
 </html>
