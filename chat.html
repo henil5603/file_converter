@@ -99,6 +99,11 @@
             background: #0056b3;
         }
 
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
         .file-upload-container {
             display: flex;
             flex-direction: column;
@@ -113,6 +118,12 @@
         .error {
             color: red;
             font-size: 0.9em;
+        }
+
+        .loading {
+            color: #007BFF;
+            font-size: 0.9em;
+            text-align: center;
         }
     </style>
     <meta name="description"
@@ -158,7 +169,8 @@
                     <div id="fileError" class="error"></div>
                 </div>
                 <input type="text" id="questionInput" placeholder="Ask a question about the PDFs...">
-                <button onclick="sendMessage()">Send</button>
+                <button id="sendBtn" onclick="sendMessage()">Send</button>
+                <div id="loading" class="loading" style="display: none;">Processing...</div>
             </div>
         </div>
     </div>
@@ -173,15 +185,28 @@
 
         // Replace with your Google Gemini API key
         const API_KEY = "AIzaSyAK2JLRbUa4PboYE81_xAxzQCmknOM71lI"; // Get from Google AI Studio
-        const genAI = new google.generativeai.GenerativeAI(API_KEY);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest" });
+        let genAI;
+        try {
+            genAI = new google.generativeai.GenerativeAI(API_KEY);
+        } catch (error) {
+            console.error("Failed to initialize Gemini API:", error);
+            document.getElementById("fileError").textContent = "API initialization failed. Check API key.";
+        }
+        const model = genAI ? genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest" }) : null;
 
         const chatBody = document.getElementById("chatBody");
         const questionInput = document.getElementById("questionInput");
         const fileInput = document.getElementById("fileInput");
         const fileError = document.getElementById("fileError");
+        const sendBtn = document.getElementById("sendBtn");
+        const loading = document.getElementById("loading");
 
         async function sendMessage() {
+            if (!model) {
+                fileError.textContent = "API not initialized. Check API key.";
+                return;
+            }
+
             const question = questionInput.value.trim();
             const files = fileInput.files;
 
@@ -201,6 +226,8 @@
             }
 
             fileError.textContent = "";
+            sendBtn.disabled = true;
+            loading.style.display = "block";
 
             // Display user message
             const userMessage = document.createElement("div");
@@ -226,31 +253,44 @@
                 for (let file of files) {
                     if (!file.name.endsWith('.pdf')) {
                         fileError.textContent = "Only PDF files are allowed.";
+                        sendBtn.disabled = false;
+                        loading.style.display = "none";
                         return;
                     }
 
                     const reader = new FileReader();
-                    const pdfBytes = await new Promise((resolve) => {
+                    const pdfBytes = await new Promise((resolve, reject) => {
                         reader.onload = () => resolve(new Uint8Array(reader.result));
+                        reader.onerror = () => reject(new Error("Failed to read PDF"));
                         reader.readAsArrayBuffer(file);
                     });
 
-                    const pdf = await pdfjsLib.getDocument({ data: pdfBytes }).promise;
-                    let textContent = '';
-                    for (let i = 0; i < pdf.numPages; i++) {
-                        const page = await pdf.getPage(i + 1);
-                        const text = await page.getTextContent();
-                        textContent += text.items.map(item => item.str).join(' ') + '\n';
+                    try {
+                        const pdf = await pdfjsLib.getDocument({ data: pdfBytes }).promise;
+                        let textContent = '';
+                        for (let i = 0; i < pdf.numPages; i++) {
+                            const page = await pdf.getPage(i + 1);
+                            const text = await page.getTextContent();
+                            textContent += text.items.map(item => item.str).join(' ') + '\n';
+                        }
+                        contents.push(textContent);
+                    } catch (pdfError) {
+                        console.error("PDF Processing Error:", pdfError);
+                        fileError.textContent = `Failed to process ${file.name}: ${pdfError.message}`;
+                        sendBtn.disabled = false;
+                        loading.style.display = "none";
+                        return;
                     }
-
-                    // Add PDF text to contents
-                    contents.push(textContent);
                 }
 
                 // Send request to Gemini API
+                console.log("Sending to Gemini API with contents:", contents);
                 const result = await model.generateContent(contents);
+                console.log("API Result:", result);
                 const response = await result.response;
+                console.log("API Response:", response);
                 const text = response.text();
+                console.log("Response Text:", text);
 
                 // Display bot response
                 const botMessage = document.createElement("div");
@@ -259,11 +299,15 @@
                 chatBody.appendChild(botMessage);
                 chatBody.scrollTop = chatBody.scrollHeight;
             } catch (error) {
+                console.error("Error in sendMessage:", error);
                 const errorMessage = document.createElement("div");
                 errorMessage.className = "message bot-message error";
                 errorMessage.textContent = "Error: " + error.message;
                 chatBody.appendChild(errorMessage);
-                chatBody.scrollTop = (chatBody.scrollHeight);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            } finally {
+                sendBtn.disabled = false;
+                loading.style.display = "none";
             }
 
             // Clear inputs
@@ -273,7 +317,7 @@
 
         // Handle Enter key press
         questionInput.addEventListener("keypress", (event) => {
-            if (event.key === "Enter") {
+            if (event.key === "Enter" && !sendBtn.disabled) {
                 sendMessage();
             }
         });
