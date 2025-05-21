@@ -1,0 +1,237 @@
+/* Base Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f5;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+/* Header Styles */
+header {
+    background-color: #007BFF;
+    color: white;
+    padding: 15px 0;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+nav {
+    margin-top: 10px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+    color: #e0e0e0;
+}
+
+/* Container Styles */
+.container {
+    width: 80%;
+    margin: 20px auto;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Elements */
+select, input, textarea, button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+/* Button Styles */
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+/* Button Container */
+.btn-container {
+    margin-top: 20px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 16px;
+    text-align: center;
+    color: #fff;
+    background-color: #007BFF;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Progress Container */
+#progressContainer {
+    width: 100%;
+    background-color: #ddd;
+    margin-top: 20px;
+    border-radius: 8px;
+}
+
+#progressBar {
+    width: 0%;
+    height: 24px;
+    background-color: #28a745;
+    border-radius: 8px;
+}
+
+#progressText {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #007BFF;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+}
+
+/* New styles for bold paragraphs */
+p {
+    font-weight: bold;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 1024px) {
+    .container {
+        width: 90%;
+    }
+
+    nav a {
+        margin: 0 10px;
+    }
+    
+    header h1 {
+        font-size: 1.8em;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    header h1 {
+        font-size: 1.6em;
+    }
+    
+    .container {
+        width: 95%;
+    }
+
+    .btn {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+    
+    button, input, select, textarea {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    footer {
+        padding: 10px 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    header h1 {
+        font-size: 1.4em;
+    }
+
+    nav a {
+        display: block;
+        margin: 10px 0;
+        font-size: 14px;
+    }
+
+    .container {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .btn {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    button, input, select, textarea {
+        padding: 8px;
+        font-size: 12px;
+    }
+    
+    #progressBar {
+        height: 20px;
+    }
+
+    footer {
+        font-size: 12px;
+    }
+
+
+
+
+
+}
+
+
+.feature {
+    width: 30%;
+    margin-bottom: 20px;
+}
+
+.feature img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.feature img:hover {
+    transform: scale(1.05);
+}
+
+.feature-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+.feature-link p {
+    margin-top: 10px;
+    font-size: 1.2em;
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Write and Save Document</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MM7LW8BM"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <header>
+        <h1>Write and Save Document</h1>
+        <nav>
+            <a href="index.html">Home</a> | 
+            <a href="write.html">Write</a> |
+            <a href="convert.html">Convert</a> | 
+            <a href="edit.html">Edit</a> |  
+            <a href="about.html">About </a> |
+            <a href="Privacy policy.html">Policy </a> |  
+            <a href="contact.html">Contact</a> 
+        </nav>
+    </header>
+
+    <div class="container">
+        <h2>Write Your Document</h2>
+
+        <textarea id="editor" rows="15" cols="80" placeholder="Write your content here..."></textarea>
+
+        <br />
+
+        <button id="saveTxtBtn">Save as TXT</button>
+        <button id="savePdfBtn">Save as PDF</button>
+
+        <div id="progressContainer" style="display:none;">
+            <div id="progressBar"></div>
+            <span id="progressText">0%</span>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Write and Save Document. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="write.js"></script>
+</body>
+</html>
